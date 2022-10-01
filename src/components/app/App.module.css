@@ -1,0 +1,19 @@
+.app{
+    margin-top: 50px;
+    margin-left: 50px;
+}
+
+.intro{
+
+}
+
+.inputs{
+    display: flex;
+}
+
+.input{
+    width: 500px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
