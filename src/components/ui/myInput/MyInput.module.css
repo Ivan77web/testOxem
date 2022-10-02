@@ -101,4 +101,24 @@
         width: 100%;
         margin: 0 auto;
     }
+
+    .input{
+        width: calc(100% - 124px);
+    }
+
+    .line{
+        width: calc(100% - 48px);
+        left: 24px;
+    }
+    
+    .activeLine{
+        max-width: calc(100%);
+    }
+    
+    .slider{
+        top: -7px;
+        right: -8px;
+        width: 16px;
+        height: 16px;
+    }
 }

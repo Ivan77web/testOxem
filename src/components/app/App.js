@@ -18,10 +18,10 @@ function App() {
   const [errorPercent, setErrorPercent] = useState(false);
   const [errorPeriod, setErrorPeriod] = useState(false);
 
-  useEffect( () => {
-    if(errorAllPrice || errorPercent || errorPeriod){
+  useEffect(() => {
+    if (errorAllPrice || errorPercent || errorPeriod) {
       setErrorAll(true)
-    } else{
+    } else {
       setErrorAll(false)
     }
   }, [errorAllPrice, errorPercent, errorPeriod])
@@ -34,67 +34,79 @@ function App() {
         </div>
 
         <div className={cl.inputs}>
-          <MyInput
-            intro="Стоимость автомобиля"
-            symbol="&#8381;"
-            start="1000000"
-            end="6000000"
-            value={allPayment}
-            setValue={setAllPayment}
-            type="price"
-            errorAll = {errorAll}
-            error={errorAllPrice}
-            setError={setErrorAllPrice}
-          />
+          <div className={cl.input}>
+            <MyInput
+              intro="Стоимость автомобиля"
+              symbol="&#8381;"
+              start="1000000"
+              end="6000000"
+              value={allPayment}
+              setValue={setAllPayment}
+              type="price"
+              errorAll={errorAll}
+              error={errorAllPrice}
+              setError={setErrorAllPrice}
+            />
+          </div>
 
-          <MyInputFirstPayment
-            intro="Первоначальный взнос"
-            start="10"
-            end="60"
-            value={percentPayment}
-            setValue={setPercentPayment}
-            firstPayment={firstPayment}
-            setFirstPayment={setFirstPayment}
-            allPayment={allPayment}
-            errorAll = {errorAll}
-            error={errorPercent}
-            setError={setErrorPercent}
-          />
+          <div className={cl.input}>
+            <MyInputFirstPayment
+              intro="Первоначальный взнос"
+              start="10"
+              end="60"
+              value={percentPayment}
+              setValue={setPercentPayment}
+              firstPayment={firstPayment}
+              setFirstPayment={setFirstPayment}
+              allPayment={allPayment}
+              errorAll={errorAll}
+              error={errorPercent}
+              setError={setErrorPercent}
+            />
+          </div>
 
-          <MyInput
-            intro="Срок лизинга"
-            symbol="мес."
-            start="1"
-            end="60"
-            value={period}
-            setValue={setPeriod}
-            type="mounth"
-            errorAll = {errorAll}
-            error={errorPeriod}
-            setError={setErrorPeriod}
-          />
+          <div className={cl.input + " " + cl.inputPeriod}>
+            <MyInput
+              intro="Срок лизинга"
+              symbol="мес."
+              start="1"
+              end="60"
+              value={period}
+              setValue={setPeriod}
+              type="mounth"
+              errorAll={errorAll}
+              error={errorPeriod}
+              setError={setErrorPeriod}
+            />
+          </div>
         </div>
 
         <div className={cl.calculations}>
-          <AllSum
-            allSum={allSum}
-            setAllSum={setAllSum}
-            firstPayment={firstPayment}
-            period={period}
-            monthlyPayment={monthlyPayment}
-            errorAll={errorAll}
-          />
+          <div className={cl.calcBlock + " " + cl.calcBlockSum}>
+            <AllSum
+              allSum={allSum}
+              setAllSum={setAllSum}
+              firstPayment={firstPayment}
+              period={period}
+              monthlyPayment={monthlyPayment}
+              errorAll={errorAll}
+            />
+          </div>
 
-          <MonthlyPayment
-            allPayment={allPayment}
-            firstPayment={firstPayment}
-            period={period}
-            monthlyPayment={monthlyPayment}
-            setMonthlyPayment={setMonthlyPayment}
-            errorAll={errorAll}
-          />
+          <div className={cl.calcBlock}>
+            <MonthlyPayment
+              allPayment={allPayment}
+              firstPayment={firstPayment}
+              period={period}
+              monthlyPayment={monthlyPayment}
+              setMonthlyPayment={setMonthlyPayment}
+              errorAll={errorAll}
+            />
+          </div>
 
-          <MyButton errorAll={errorAll}/>
+          <div className={cl.calcBlock + " " + cl.button}>
+            <MyButton errorAll={errorAll} />
+          </div>
         </div>
       </div>
     </div>

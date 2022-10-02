@@ -1,5 +1,5 @@
 .block{
-    width: 427px;
+    width: 100%;
     height: 81px;
 }
 
@@ -22,4 +22,24 @@
 
 .disabled{
     opacity: 0.3;
+}
+
+@media screen and (max-width: 380px) {
+    .intro{
+        font-size: 18px;
+    }
+
+    .sum{
+        font-size: 40px;
+    }
+}
+
+@media screen and (max-width: 319px) {
+    .intro{
+        font-size: 14px;
+    }
+
+    .sum{
+        font-size: 30px;
+    }
 }

@@ -18,8 +18,8 @@ export default function MyInput({
     const myInput = useRef(null)
     const activeLine = useRef(null)
     const percentOfLine = (Number(value) * 100) / (Number(end) - Number(start))
-    const [leftOfLine, setLeftOfLine] = useState(percentOfLine / 100 * 363);
     const [widthInput, setWidthInput] = useState(0)
+    const [leftOfLine, setLeftOfLine] = useState(percentOfLine / 100 * widthInput);
 
     const changeLeftOfLine = (value) => {
         let valueLeft = value;
@@ -34,10 +34,10 @@ export default function MyInput({
                 setLeftOfLine(0)
             } else if (Number(valueLeft) > Number(end)) {
                 setValue(valueLeft)
-                setLeftOfLine(363)
+                setLeftOfLine(widthInput)
             } else {
                 setValue(valueLeft)
-                setLeftOfLine((Number(valueLeft) * 100) / (Number(end) - Number(start)))
+                setLeftOfLine( (valueLeft * widthInput)/(Number(end) - Number(start)))
             }
         }
     }
@@ -61,7 +61,7 @@ export default function MyInput({
             }
 
             setLeftOfLine(newLeft)
-            setValue(Math.round((((Number(newLeft) * 100) / 36300) * (Number(end) - Number(start))) + Number(start)));
+            setValue(Math.round((((Number(newLeft) * 100) / (widthInput * 100) ) * (Number(end) - Number(start))) + Number(start)));
         }
 
         function onMouseUp() {
@@ -89,10 +89,17 @@ export default function MyInput({
     }, [value])
 
     useEffect( () => {
-        setWidthInput(myInput.current.clientWidth)
+        setWidthInput(myInput.current.clientWidth - 64)
+        setLeftOfLine(percentOfLine / 100 * (myInput.current.clientWidth - 64))
     }, [myInput.current])
 
-    window.onresize = () => setWidthInput(myInput.current.clientWidth);
+    // useEffect( () => {
+    //     if(leftOfLine > widthInput){
+    //         setLeftOfLine(widthInput)
+    //     }
+    // }, [leftOfLine, widthInput])
+
+    window.onresize = () => setWidthInput(myInput.current.clientWidth - 64);
 
     return (
         <div className={errorAll ? error ? cl.myInput : cl.myInput + " " + cl.disabled : cl.myInput} ref={myInput}>

@@ -24,13 +24,96 @@
     justify-content: space-between;
 }
 
+.calcBlock{
+    width: 427px;
+    height: 81px;
+    margin-bottom: 44px;
+}
+
 @media screen and (max-width: 1439px) {
     .intro{
         margin-top: 100px;
+        margin-bottom: 44px;
     }
 
     .inputs{
         display: block;
-        justify-content: space-between;
-    }   
+    }  
+    
+    .input{
+        margin-bottom: 32px;
+    }
+
+    .inputPeriod{
+        margin-bottom: 37px;
+    }
+
+    .calculations{
+        flex-wrap: wrap;
+    }
+
+    .calcBlock{
+        width: 50%;   
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .container{
+        width: calc(100% - 70px);
+        margin: 0 auto;
+    }
+
+    .intro{
+        height: fit-content;
+        margin-top: 64px;
+        margin-bottom: 56px;
+    }
+
+    .calcBlock{
+        width: 45%;
+        min-width: fit-content;
+    }
+
+    .calcBlockSum{
+        margin-right: 10%;
+    }
+
+    .button{
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 440px) {
+    .intro{
+        height: fit-content;
+        width: fit-content;
+        margin-top: 44px;
+        margin-bottom: 32px;
+        font-size: 22px;
+    }
+
+    .button{
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 370px) {
+    .intro{
+        font-size: 20px;
+    }
+}
+
+@media screen and (max-width: 319px) {
+    .container{
+        width: calc(100% - 40px);
+        margin: 0 auto;
+    }
+
+    .intro{
+        font-size: 20px;
+    }
+
+    .calcBlock{
+        margin-bottom: 29px;
+    }
 }
