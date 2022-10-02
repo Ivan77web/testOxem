@@ -2,3 +2,31 @@
     margin: 0;
     padding: 0;
 }
+
+@font-face {
+    font-family: 'Gilroy';
+    src: url(../fonts/Gilroy-Regular.ttf);
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Gilroy';
+    src: url(../fonts/Gilroy-Bold.ttf);
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Nekst';
+    src: url(../fonts/Nekst-Regular.ttf);
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Nekst';
+    src: url(../fonts/Nekst-Bold.ttf);
+    font-weight: 700;
+    font-style: normal;
+}

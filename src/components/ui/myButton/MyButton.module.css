@@ -1,0 +1,17 @@
+.button{
+    width: 426px;
+    height: 68px;
+    border: none;
+    border-radius: 40px;
+    background: #FF9514;
+    color: white;
+    font-family: Nekst;
+    font-weight: bold;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.disabled{
+    cursor:inherit;
+    opacity: 0.3;
+}

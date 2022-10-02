@@ -1,0 +1,25 @@
+.block{
+    width: 427px;
+    height: 81px;
+}
+
+.intro{
+    margin-bottom: 8px;
+    font-family: Gilroy;
+    font-size: 16px;
+    font-weight:normal;
+    color: #575757;
+}
+
+.sum{
+    height: 50px;
+    line-height: 50px;
+    font-family: Nekst;
+    font-weight: bold;
+    font-size: 54px;
+    color: #575757;
+}
+
+.disabled{
+    opacity: 0.3;
+}

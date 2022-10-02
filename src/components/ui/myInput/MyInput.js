@@ -1,27 +1,34 @@
 import React, { useEffect, useRef, useState } from "react";
 import cl from "./MyInput.module.css"
 
-export default function MyInput({ 
-    intro, 
-    symbol, 
-    start, 
-    end, 
+export default function MyInput({
+    intro,
+    symbol,
+    start,
+    end,
     value,
     setValue,
+    type,
+    errorAll,
+    error,
+    setError
 }) {
     const line = useRef(null);
     const slider = useRef(null);
     const myInput = useRef(null)
     const activeLine = useRef(null)
-    
-    const [percentOfLine, setPercentOfLine] = useState((Number(value) * 100) / (Number(end) - Number(start)))
+    const percentOfLine = (Number(value) * 100) / (Number(end) - Number(start))
     const [leftOfLine, setLeftOfLine] = useState(percentOfLine / 100 * 363);
-    const [error, setError] = useState(false);
+    const [widthInput, setWidthInput] = useState(0)
 
     const changeLeftOfLine = (value) => {
         let valueLeft = value;
 
-        if (!!Number(valueLeft) || valueLeft === "") {
+        if (
+            (!!Number(valueLeft) || valueLeft === "") &&
+            ((type === "price" && valueLeft.length <= 7) ||
+                (type === "mounth" && valueLeft.length <= 2))
+        ) {
             if (Number(valueLeft) < Number(start)) {
                 setValue(valueLeft)
                 setLeftOfLine(0)
@@ -81,12 +88,23 @@ export default function MyInput({
 
     }, [value])
 
+    useEffect( () => {
+        setWidthInput(myInput.current.clientWidth)
+    }, [myInput.current])
+
+    window.onresize = () => setWidthInput(myInput.current.clientWidth);
+
     return (
-        <div className={cl.myInput} ref={myInput}>
+        <div className={errorAll ? error ? cl.myInput : cl.myInput + " " + cl.disabled : cl.myInput} ref={myInput}>
             <p className={cl.intro}>{intro}</p>
 
             <div className={cl.inputBlock}>
-                <input className={cl.input} value={value} onChange={(e) => changeLeftOfLine(e.target.value)} />
+                <input 
+                    className={cl.input} 
+                    disabled={errorAll ? error ? false : true : false} 
+                    value={value} 
+                    onChange={(e) => changeLeftOfLine(e.target.value)} 
+                />
 
                 <div className={cl.line} ref={line}>
                     <div className={cl.activeLine} ref={activeLine}>

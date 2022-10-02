@@ -1,30 +1,31 @@
 import React, { useEffect, useRef, useState } from "react";
 import cl from "./MyInputFirstPayment.module.css"
 
-export default function MyInputFirstPayment({ 
-    intro, 
-    symbol, 
-    start, 
-    end, 
+export default function MyInputFirstPayment({
+    intro,
+    symbol,
+    start,
+    end,
     value,
     setValue,
     firstPayment,
     setFirstPayment,
     allPayment,
+    errorAll,
+    error,
+    setError
 }) {
     const line = useRef(null);
     const slider = useRef(null);
     const myInput = useRef(null)
     const activeLine = useRef(null)
-
-    const [percentOfLine, setPercentOfLine] = useState((Number(value) * 100) / (Number(end) - Number(start)))
+    const percentOfLine = (Number(value) * 100) / (Number(end) - Number(start))
     const [leftOfLine, setLeftOfLine] = useState(percentOfLine / 100 * 363);
-    const [error, setError] = useState(false);
 
     const changeLeftOfLine = (value) => {
         let valueLeft = value;
 
-        if (!!Number(valueLeft) || valueLeft === "") {
+        if ( (!!Number(valueLeft) || valueLeft === "") && valueLeft.length <= 2) {
             if (Number(valueLeft) < Number(start)) {
                 setValue(valueLeft)
                 setLeftOfLine(0)
@@ -84,26 +85,33 @@ export default function MyInputFirstPayment({
 
     }, [value])
 
-    useEffect( () => {
+    useEffect(() => {
         setFirstPayment(Number(allPayment) * Number(value) / 100)
     }, [value, allPayment])
 
     return (
-        <div className={cl.myInput} ref={myInput}>
+        <div className={errorAll ? error ? cl.myInput : cl.myInput + " " + cl.disabled : cl.myInput} ref={myInput}>
             <p className={cl.intro}>{intro}</p>
 
-            <div className={cl.inputBlock}>
-                <input className={cl.input} value={value} onChange={(e) => changeLeftOfLine(e.target.value)} />
+            <div className={cl.inputElem}>
+                <input 
+                    className={cl.input} 
+                    disabled={errorAll ? error ? false : true : false} 
+                    value={value} 
+                    onChange={(e) => changeLeftOfLine(e.target.value)} 
+                />
+                
+                <div className={cl.percent}>%</div>
+            </div>
 
-                <div className={cl.line} ref={line}>
-                    <div className={cl.activeLine} ref={activeLine}>
-                        <div className={cl.slider} ref={slider} onMouseDown={startDnD} onDragStart={ondragstart} />
-                    </div>
+            <div className={cl.line} ref={line}>
+                <div className={cl.activeLine} ref={activeLine}>
+                    <div className={cl.slider} ref={slider} onMouseDown={startDnD} onDragStart={ondragstart} />
                 </div>
             </div>
 
             <div className={cl.sizePayment}>
-                {firstPayment} &#8381;
+                {Math.round(firstPayment)} &#8381;
             </div>
 
             <div className={error ? cl.error : cl.active}>
