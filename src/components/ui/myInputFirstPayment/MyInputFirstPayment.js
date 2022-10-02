@@ -21,7 +21,6 @@ export default function MyInputFirstPayment({
     const activeLine = useRef(null)
     const percentOfLine = (Number(value) * 100) / (Number(end) - Number(start))
     const [widthInput, setWidthInput] = useState(0)
-    // const [leftOfLine, setLeftOfLine] = useState(percentOfLine / 100 * 363);
     const [leftOfLine, setLeftOfLine] = useState(percentOfLine / 100 * widthInput);
 
     const changeLeftOfLine = (value) => {

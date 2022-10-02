@@ -1,6 +1,7 @@
 .container{
     width: calc(100% - 100px);
     margin: 0 auto;
+    background: rgb(211, 158, 158);
 }
 
 .intro{

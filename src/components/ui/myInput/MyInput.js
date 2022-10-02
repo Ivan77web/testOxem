@@ -37,7 +37,7 @@ export default function MyInput({
                 setLeftOfLine(widthInput)
             } else {
                 setValue(valueLeft)
-                setLeftOfLine( (valueLeft * widthInput)/(Number(end) - Number(start)))
+                setLeftOfLine((valueLeft * widthInput) / (Number(end) - Number(start)))
             }
         }
     }
@@ -47,8 +47,13 @@ export default function MyInput({
 
         let shiftX = event.clientX - slider.current.getBoundingClientRect().left;
 
+        // document.addEventListener('pointermove', onMouseMove);
+        // document.addEventListener('pointerup', onMouseUp);
+
         document.addEventListener('mousemove', onMouseMove);
         document.addEventListener('mouseup', onMouseUp);
+        document.addEventListener('touchmove', onMouseMove);
+        document.addEventListener('touchend', onMouseUp);
 
         function onMouseMove(event) {
             let newLeft = event.clientX - shiftX - line.current.getBoundingClientRect().left;
@@ -61,12 +66,14 @@ export default function MyInput({
             }
 
             setLeftOfLine(newLeft)
-            setValue(Math.round((((Number(newLeft) * 100) / (widthInput * 100) ) * (Number(end) - Number(start))) + Number(start)));
+            setValue(Math.round((((Number(newLeft) * 100) / (widthInput * 100)) * (Number(end) - Number(start))) + Number(start)));
         }
 
         function onMouseUp() {
             document.removeEventListener('mouseup', onMouseUp);
             document.removeEventListener('mousemove', onMouseMove);
+            document.addEventListener('touchmove', onMouseMove);
+            document.addEventListener('touchend', onMouseUp);
         }
     };
 
@@ -88,16 +95,10 @@ export default function MyInput({
 
     }, [value])
 
-    useEffect( () => {
+    useEffect(() => {
         setWidthInput(myInput.current.clientWidth - 64)
         setLeftOfLine(percentOfLine / 100 * (myInput.current.clientWidth - 64))
     }, [myInput.current])
-
-    // useEffect( () => {
-    //     if(leftOfLine > widthInput){
-    //         setLeftOfLine(widthInput)
-    //     }
-    // }, [leftOfLine, widthInput])
 
     window.onresize = () => setWidthInput(myInput.current.clientWidth - 64);
 
@@ -106,16 +107,16 @@ export default function MyInput({
             <p className={cl.intro}>{intro}</p>
 
             <div className={cl.inputBlock}>
-                <input 
-                    className={cl.input} 
-                    disabled={errorAll ? error ? false : true : false} 
-                    value={value} 
-                    onChange={(e) => changeLeftOfLine(e.target.value)} 
+                <input
+                    className={cl.input}
+                    disabled={errorAll ? error ? false : true : false}
+                    value={value}
+                    onChange={(e) => changeLeftOfLine(e.target.value)}
                 />
 
                 <div className={cl.line} ref={line}>
                     <div className={cl.activeLine} ref={activeLine}>
-                        <div className={cl.slider} ref={slider} onMouseDown={startDnD} onDragStart={ondragstart} />
+                        <div className={cl.slider} ref={slider} onTouchStart={startDnD} onMouseDown={startDnD} onDragStart={ondragstart} />
                     </div>
                 </div>
             </div>
