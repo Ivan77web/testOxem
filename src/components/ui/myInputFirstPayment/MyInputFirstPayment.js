@@ -26,7 +26,7 @@ export default function MyInputFirstPayment({
     const changeLeftOfLine = (value) => {
         let valueLeft = value;
 
-        if ( (!!Number(valueLeft) || valueLeft === "") && valueLeft.length <= 2) {
+        if ((!!Number(valueLeft) || valueLeft === "") && valueLeft.length <= 2) {
             if (Number(valueLeft) < Number(start)) {
                 setValue(valueLeft)
                 setLeftOfLine(0)
@@ -35,37 +35,70 @@ export default function MyInputFirstPayment({
                 setLeftOfLine(widthInput)
             } else {
                 setValue(valueLeft)
-                setLeftOfLine( (valueLeft * widthInput)/(Number(end) - Number(start)))
+                setLeftOfLine((valueLeft * widthInput) / (Number(end) - Number(start)))
             }
         }
     }
 
     const startDnD = (event) => {
-        event.preventDefault();
+        if (event.type === "mousedown") {
+            event.preventDefault();
+        }
 
-        let shiftX = event.clientX - slider.current.getBoundingClientRect().left;
+        let shiftX;
+
+        if (event.type === "touchstart") {
+            shiftX = Number(event.touches[0].clientX - slider.current.getBoundingClientRect().left);
+        } else if (event.type === "mousedown") {
+            shiftX = event.clientX - slider.current.getBoundingClientRect().left;
+        }
 
         document.addEventListener('mousemove', onMouseMove);
         document.addEventListener('mouseup', onMouseUp);
 
+        document.addEventListener('touchmove', onTouchMove);
+        document.addEventListener('touchend', onTouchUp);
+
         function onMouseMove(event) {
-            let newLeft = event.clientX - shiftX - line.current.getBoundingClientRect().left;
-            let rightEdge = line.current.offsetWidth - slider.current.offsetWidth;
+            if (event.type === 'mousemove') {
+                let newLeft = event.clientX - shiftX - line.current.getBoundingClientRect().left;
+                let rightEdge = line.current.offsetWidth - slider.current.offsetWidth;
 
-            if (newLeft < 0) {
-                newLeft = 0;
-            } else if (newLeft > rightEdge) {
-                newLeft = rightEdge;
+                if (newLeft < 0) {
+                    newLeft = 0;
+                } else if (newLeft > rightEdge) {
+                    newLeft = rightEdge;
+                }
+
+                setLeftOfLine(newLeft)
+                setValue(Math.round((((Number(newLeft) * 100) / (widthInput * 100)) * (Number(end) - Number(start))) + Number(start)));
             }
+        }
 
-            setLeftOfLine(newLeft)
-            // setValue(Math.round((((Number(newLeft) * 100) / 36300) * (Number(end) - Number(start))) + Number(start)));
-            setValue(Math.round((((Number(newLeft) * 100) / (widthInput * 100) ) * (Number(end) - Number(start))) + Number(start)));
+        function onTouchMove(event) {
+            if (event.type === 'touchmove') {
+                let newLeft = event.touches[0].clientX - shiftX - line.current.getBoundingClientRect().left;
+                let rightEdge = line.current.offsetWidth - slider.current.offsetWidth;
+
+                if (newLeft < 0) {
+                    newLeft = 0;
+                } else if (newLeft > rightEdge) {
+                    newLeft = rightEdge;
+                }
+
+                setLeftOfLine(newLeft)
+                setValue(Math.round((((Number(newLeft) * 100) / (widthInput * 100)) * (Number(end) - Number(start))) + Number(start)));
+            }
         }
 
         function onMouseUp() {
             document.removeEventListener('mouseup', onMouseUp);
             document.removeEventListener('mousemove', onMouseMove);
+        }
+
+        function onTouchUp() {
+            document.removeEventListener('touchmove', onTouchMove);
+            document.removeEventListener('touchend', onTouchUp);
         }
     };
 
@@ -91,13 +124,13 @@ export default function MyInputFirstPayment({
         setFirstPayment(Number(allPayment) * Number(value) / 100)
     }, [value, allPayment])
 
-    useEffect( () => {
+    useEffect(() => {
         setWidthInput(myInput.current.clientWidth - 64)
         setLeftOfLine(percentOfLine / 100 * (myInput.current.clientWidth - 64))
     }, [myInput.current])
 
-    useEffect( () => {
-        if(leftOfLine > widthInput){
+    useEffect(() => {
+        if (leftOfLine > widthInput) {
             setLeftOfLine(widthInput)
         }
     }, [leftOfLine, widthInput])
@@ -109,19 +142,19 @@ export default function MyInputFirstPayment({
             <p className={cl.intro}>{intro}</p>
 
             <div className={cl.inputElem}>
-                <input 
-                    className={cl.input} 
-                    disabled={errorAll ? error ? false : true : false} 
-                    value={value} 
-                    onChange={(e) => changeLeftOfLine(e.target.value)} 
+                <input
+                    className={cl.input}
+                    disabled={errorAll ? error ? false : true : false}
+                    value={value}
+                    onChange={(e) => changeLeftOfLine(e.target.value)}
                 />
-                
+
                 <div className={cl.percent}>%</div>
             </div>
 
             <div className={cl.line} ref={line}>
                 <div className={cl.activeLine} ref={activeLine}>
-                    <div className={cl.slider} ref={slider} onMouseDown={startDnD} onDragStart={ondragstart} />
+                    <div className={cl.slider} ref={slider} onTouchStart={startDnD} onMouseDown={startDnD} onDragStart={ondragstart} />
                 </div>
             </div>
 

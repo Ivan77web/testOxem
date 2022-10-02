@@ -17,7 +17,7 @@ export default function MyInput({
     const slider = useRef(null);
     const myInput = useRef(null)
     const activeLine = useRef(null)
-    const percentOfLine = (Number(value) * 100) / (Number(end) - Number(start))
+    const percentOfLine = ((Number(value) - Number(start)) * 100) / (Number(end) - Number(start))
     const [widthInput, setWidthInput] = useState(0)
     const [leftOfLine, setLeftOfLine] = useState(percentOfLine / 100 * widthInput);
 
@@ -27,7 +27,7 @@ export default function MyInput({
         if (
             (!!Number(valueLeft) || valueLeft === "") &&
             ((type === "price" && valueLeft.length <= 7) ||
-                (type === "mounth" && valueLeft.length <= 2))
+                (type === "mounth" && valueLeft.length < 3))
         ) {
             if (Number(valueLeft) < Number(start)) {
                 setValue(valueLeft)
@@ -37,43 +37,70 @@ export default function MyInput({
                 setLeftOfLine(widthInput)
             } else {
                 setValue(valueLeft)
-                setLeftOfLine((valueLeft * widthInput) / (Number(end) - Number(start)))
+                setLeftOfLine(( (valueLeft - Number(start)) * widthInput) / (Number(end) - Number(start)))
             }
         }
     }
 
     const startDnD = (event) => {
-        event.preventDefault();
+        if(event.type === "mousedown"){
+            event.preventDefault();
+        }
 
-        let shiftX = event.clientX - slider.current.getBoundingClientRect().left;
+        let shiftX;
 
-        // document.addEventListener('pointermove', onMouseMove);
-        // document.addEventListener('pointerup', onMouseUp);
+        if (event.type === "touchstart") {
+            shiftX = Number(event.touches[0].clientX - slider.current.getBoundingClientRect().left);
+        } else if (event.type === "mousedown") {
+            shiftX = event.clientX - slider.current.getBoundingClientRect().left;
+        }
 
         document.addEventListener('mousemove', onMouseMove);
         document.addEventListener('mouseup', onMouseUp);
-        document.addEventListener('touchmove', onMouseMove);
-        document.addEventListener('touchend', onMouseUp);
+
+        document.addEventListener('touchmove', onTouchMove);
+        document.addEventListener('touchend', onTouchUp);
 
         function onMouseMove(event) {
-            let newLeft = event.clientX - shiftX - line.current.getBoundingClientRect().left;
-            let rightEdge = line.current.offsetWidth - slider.current.offsetWidth;
+            if (event.type === 'mousemove') {
+                let newLeft = event.clientX - shiftX - line.current.getBoundingClientRect().left;
+                let rightEdge = line.current.offsetWidth - slider.current.offsetWidth;
 
-            if (newLeft < 0) {
-                newLeft = 0;
-            } else if (newLeft > rightEdge) {
-                newLeft = rightEdge;
+                if (newLeft < 0) {
+                    newLeft = 0;
+                } else if (newLeft > rightEdge) {
+                    newLeft = rightEdge;
+                }
+
+                setLeftOfLine(newLeft)
+                setValue(Math.round((((Number(newLeft) * 100) / (widthInput * 100)) * (Number(end) - Number(start))) + Number(start)));
             }
+        }
 
-            setLeftOfLine(newLeft)
-            setValue(Math.round((((Number(newLeft) * 100) / (widthInput * 100)) * (Number(end) - Number(start))) + Number(start)));
+        function onTouchMove(event) {
+            if (event.type === 'touchmove') {
+                let newLeft = event.touches[0].clientX - shiftX - line.current.getBoundingClientRect().left;
+                let rightEdge = line.current.offsetWidth - slider.current.offsetWidth;
+
+                if (newLeft < 0) {
+                    newLeft = 0;
+                } else if (newLeft > rightEdge) {
+                    newLeft = rightEdge;
+                }
+
+                setLeftOfLine(newLeft)
+                setValue(Math.round((((Number(newLeft) * 100) / (widthInput * 100)) * (Number(end) - Number(start))) + Number(start)));
+            }
         }
 
         function onMouseUp() {
             document.removeEventListener('mouseup', onMouseUp);
             document.removeEventListener('mousemove', onMouseMove);
-            document.addEventListener('touchmove', onMouseMove);
-            document.addEventListener('touchend', onMouseUp);
+        }
+
+        function onTouchUp() {
+            document.removeEventListener('touchmove', onTouchMove);
+            document.removeEventListener('touchend', onTouchUp);
         }
     };
 

@@ -105,7 +105,15 @@ function App() {
           </div>
 
           <div className={cl.calcBlock + " " + cl.button}>
-            <MyButton errorAll={errorAll} />
+            <MyButton 
+              errorAll={errorAll} 
+              allPayment={allPayment}
+              percentPayment={percentPayment}
+              firstPayment={firstPayment}
+              period={period}
+              allSum={allSum}
+              monthlyPayment={monthlyPayment}
+            />
           </div>
         </div>
       </div>

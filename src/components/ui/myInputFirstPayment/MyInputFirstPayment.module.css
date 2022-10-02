@@ -89,6 +89,7 @@
     border-radius: 100%;
     z-index: 100;
     cursor: pointer;
+    touch-action: none;
 }
 
 .sizePayment{
